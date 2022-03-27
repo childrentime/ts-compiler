@@ -1,21 +1,21 @@
-import lexer from '../lexer';
+import tokenizer from '../';
 describe('lexer', () => {
   it('shoule identify keywords', () => {
     const input = 'const a = 1';
-    lexer.start(input);
+    const tokens = tokenizer(input);
     const output = [
       { type: 'Keyword', value: 'const' },
       { type: 'Identifier', value: 'a' },
       { type: 'Operator', value: '=' },
       { type: 'Number', value: '1' }
     ];
-    expect(lexer.DFA.result.tokens).toStrictEqual(output);
+    expect(tokens).toStrictEqual(output);
   });
 
   it('should identify operators', () => {
     const input = 'const a = 1; a = 1 + 2;';
-    lexer.start(input);
-    expect(lexer.DFA.result.tokens).toStrictEqual([
+    const tokens = tokenizer(input);
+    expect(tokens).toStrictEqual([
       { type: 'Keyword', value: 'const' },
       { type: 'Identifier', value: 'a' },
       { type: 'Operator', value: '=' },
@@ -32,8 +32,8 @@ describe('lexer', () => {
 
   it('should identify doubel opeators', () => {
     const input = 'const a = 1; const b = a >> 1;';
-    lexer.start(input);
-    expect(lexer.DFA.result.tokens).toStrictEqual([
+    const tokens = tokenizer(input);
+    expect(tokens).toStrictEqual([
       { type: 'Keyword', value: 'const' },
       { type: 'Identifier', value: 'a' },
       { type: 'Operator', value: '=' },
