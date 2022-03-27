@@ -1,13 +1,13 @@
 import { flowModel, DFA_STATE_CONST, ENUM_CONST, tool } from './js-define';
 
-// Lexical analyzer
+// 词法分析器
 const lexer = {
-  // Input Stream Reader
+  // 输入流读取
   ISR: {
     props: {
-      stream: '', // Character stream
-      length: 0, // Length of character stream
-      seq: 0 // The sequence number of the character stream
+      stream: '', // 字符流
+      length: 0, // 字符流长度
+      seq: 0 // 字符流句子个数
     },
     propsChange: {
       set(prop: 'stream' | 'length' | 'seq', value: string | number) {
@@ -28,16 +28,16 @@ const lexer = {
     },
 
     before(stream: any) {
-      // Determine character stream
+      // 设置字符流
       lexer.ISR.propsChange.set('stream', stream);
 
-      // Replace multiple line feeds with one line feed
+      // 用一个换行符替换多个换行符
       lexer.ISR.propsChange.set(
         'stream',
         lexer.ISR.props.stream.replace(/\n+/g, '\n').trim()
       );
 
-      // Calculate character stream length and sequence number
+      // 计算字符流长度和序列数
       lexer.ISR.propsChange.set('length', lexer.ISR.props.stream.length);
       lexer.ISR.propsChange.set('seq', 0);
     },
@@ -95,11 +95,11 @@ const lexer = {
     }
   },
 
-  // Deterministic finite automaton
+  // 确定性有限自动机
   DFA: {
     result: {
-      matchs: [] as string[], // Matched character queue
-      tokens: [] as { type: string; value: string }[] // List of generated tokens
+      matchs: [] as string[], // 匹配字符队列
+      tokens: [] as { type: string; value: string }[] // 生成的token
     },
     resultChange: {
       toDefault() {
@@ -136,7 +136,7 @@ const lexer = {
       }
     },
 
-    state: DFA_STATE_CONST.S_RESET, // Current machine status
+    state: DFA_STATE_CONST.S_RESET, // 当前的状态
     events: {
       flowtoNextState(ch: string, state: number) {
         lexer.DFA.resultChange.pushToMatchs(ch);
@@ -149,14 +149,14 @@ const lexer = {
     }
   },
 
-  // Reset lexer data
+  // 重置数据
   resetDefault() {
     flowModel.resultChange.toDefault();
     lexer.ISR.propsChange.toDefault();
     lexer.DFA.resultChange.toDefault();
   },
 
-  // Start working
+  // 开始
   start(stream: any) {
     lexer.resetDefault();
     lexer.ISR.before(stream);
