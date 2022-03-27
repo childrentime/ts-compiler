@@ -1,0 +1,10 @@
+{
+  "name": "ts-compiler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^2.6.1",
+    "typescript": "^4.6.3"
+  }
+}
